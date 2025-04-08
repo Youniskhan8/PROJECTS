@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agri Forecast Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #eafaf1;
+    }
+
+    .sidebar {
+      width: 220px;
+      height: 100vh;
+      background-color: #10271e;
+      color: white;
+      position: fixed;
+      padding-top: 20px;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 30px;
+      color: #96f7b5;
+    }
+
+    .nav-link {
+      padding: 15px 25px;
+      display: block;
+      color: white;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background-color: #1fa566;
+      color: white;
+      border-radius: 5px;
+    }
+
+    .main {
+      margin-left: 240px;
+      padding: 30px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+    }
+
+    .bar {
+      height: 20px;
+      background-color: #3cb371;
+      margin: 6px 0;
+      border-radius: 4px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-info img {
+      width: 50px;
+      border-radius: 50%;
+    }
+
+    .logout {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .logout a {
+      color: #ff7070;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>🌿 Agri Forecast</h2>
+    <a href="#" class="nav-link active">🏠 Home</a>
+    <a href="analysis.html" class="nav-link">📈 Analysis</a>
+    <a href="#" class="nav-link">📊 Sales Data</a>
+    <a href="#" class="nav-link">👤 Profile</a>
+    <a href="#" class="nav-link">⚙️ Settings</a>
+
+    <div class="logout">
+      <a href="#">⏻ Log out</a>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="grid">
+      <div class="card">
+        <h3>Popular Commodities</h3>
+        <div><img src="C:\Users\Muneeeb\Desktop\project\PROJECTS\static\images\popular_commodities.png" alt="Commodity Chart" style="width: 50%;">
+      </div>
+
+      <div class="card">
+        <h3>Notifications</h3>
+        <p>Notice: New pricing guidelines have been issued.</p>
+      </div>
+
+      <div class="card">
+        <h3>Analysis</h3>
+        <p>Prediction of commodities based on AI model.</p>
+      </div>
+
+      <div class="card">
+        <h3>Sales Data</h3>
+        <div class="user-info">
+          <img src="https://www.w3schools.com/howto/img_avatar.png" alt="User Avatar">
+          <div>
+            <strong>Muneeb</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
