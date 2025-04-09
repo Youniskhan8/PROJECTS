@@ -18,6 +18,7 @@
       color: white;
       position: fixed;
       padding-top: 20px;
+      z-index: 2;
     }
 
     .sidebar h2 {
@@ -41,15 +42,71 @@
       border-radius: 5px;
     }
 
-    .main {
-      margin-left: 240px;
-      padding: 30px;
+    .logout {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .logout a {
+      color: #ff7070;
+      text-decoration: none;
+    }
+
+    .content {
+      margin-left: 220px;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .carousel {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .slides {
+      display: flex;
+      width: 400vw;
+      animation: slide 20s infinite;
+    }
+
+    .slides img {
+  width: 100vw;
+  height: 350px;
+  object-fit: cover;         
+  object-position: center;   
+  flex-shrink: 0;
+}
+
+
+
+
+    
+
+    @keyframes slide {
+      0%   { transform: translateX(0vw); }
+      20%  { transform: translateX(0vw); }
+
+      25%  { transform: translateX(-100vw); }
+      45%  { transform: translateX(-100vw); }
+
+      50%  { transform: translateX(-200vw); }
+      70%  { transform: translateX(-200vw); }
+
+      75%  { transform: translateX(-300vw); }
+      95%  { transform: translateX(-300vw); }
+
+      100% { transform: translateX(0vw); }
     }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
+      padding: 30px;
     }
 
     .card {
@@ -63,13 +120,6 @@
       margin-bottom: 10px;
     }
 
-    .bar {
-      height: 20px;
-      background-color: #3cb371;
-      margin: 6px 0;
-      border-radius: 4px;
-    }
-
     .user-info {
       display: flex;
       align-items: center;
@@ -80,18 +130,6 @@
       width: 50px;
       border-radius: 50%;
     }
-
-    .logout {
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
-      text-align: center;
-    }
-
-    .logout a {
-      color: #ff7070;
-      text-decoration: none;
-    }
   </style>
 </head>
 <body>
@@ -99,7 +137,7 @@
   <div class="sidebar">
     <h2>🌿 Agri Forecast</h2>
     <a href="#" class="nav-link active">🏠 Home</a>
-    <a href="analysis.html" class="nav-link">📈 Analysis</a>
+    <a href="/analysis" class="nav-link">📈 Analysis</a>
     <a href="#" class="nav-link">📊 Sales Data</a>
     <a href="#" class="nav-link">👤 Profile</a>
     <a href="#" class="nav-link">⚙️ Settings</a>
@@ -109,11 +147,23 @@
     </div>
   </div>
 
-  <div class="main">
+  <div class="content">
+
+    <!-- 🔁 Auto-Sliding Image Carousel -->
+    <div class="carousel">
+      <div class="slides">
+        <img src="{{ url_for('static', filename='images/apple.png') }}" alt="Apple">
+        <img src="{{ url_for('static', filename='images/onions.png') }}" alt="Onions">
+        <img src="{{ url_for('static', filename='images/potato.png') }}" alt="Potato">
+        <img src="{{ url_for('static', filename='images/spinach.png') }}" alt="Spinach">
+      </div>
+    </div>
+
+    <!-- 🔲 Dashboard Grid -->
     <div class="grid">
       <div class="card">
         <h3>Popular Commodities</h3>
-        <div><img src="C:\Users\Muneeeb\Desktop\project\PROJECTS\static\images\popular_commodities.png" alt="Commodity Chart" style="width: 50%;">
+        <img src="{{ url_for('static', filename='images/popular_commodities.png') }}" alt="Commodity Chart" style="width: 100%;">
       </div>
 
       <div class="card">
@@ -130,12 +180,11 @@
         <h3>Sales Data</h3>
         <div class="user-info">
           <img src="https://www.w3schools.com/howto/img_avatar.png" alt="User Avatar">
-          <div>
-            <strong>Muneeb</strong>
-          </div>
+          <div><strong>Muneeb</strong></div>
         </div>
       </div>
     </div>
+
   </div>
 
 </body>

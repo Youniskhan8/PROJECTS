@@ -1,7 +1,7 @@
 /* style.css */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(to right, #7F00FF, #E100FF);
+    background: linear-gradient(to right, #a8e063, #56ab2f); /* 🍃 Green Gradient */
     color: #333;
     margin: 0;
     padding: 0;
@@ -12,12 +12,12 @@ body {
 }
 
 .container {
-    max-width: 500px;
+    max-width: 550px;
     background: #ffffffee;
-    padding: 30px;
+    padding: 30px 40px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     border-radius: 16px;
-    animation: fadeIn 1s ease-in-out;
+    animation: fadeIn 0.6s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -27,10 +27,11 @@ body {
 
 h2 {
     text-align: center;
-    color: #4a148c;
+    color: #2e7d32;
     margin-bottom: 30px;
 }
 
+/* Form styles */
 .form-group {
     margin-bottom: 18px;
 }
@@ -39,41 +40,45 @@ label {
     display: block;
     font-weight: 600;
     margin-bottom: 6px;
-    color: #333;
+    color: #2e7d32;
+    font-size: 15px;
 }
 
 input[type="text"],
 input[type="number"],
-input[type="date"] {
+input[type="date"],
+select {
     width: 100%;
     padding: 12px;
-    border: 2px solid #ccc;
+    border: 2px solid #c8e6c9;
     border-radius: 10px;
     box-sizing: border-box;
+    font-size: 15px;
     transition: all 0.3s ease;
 }
 
-input:focus {
-    border-color: #9c27b0;
+input:focus,
+select:focus {
+    border-color: #66bb6a;
     outline: none;
-    box-shadow: 0 0 5px rgba(156, 39, 176, 0.5);
+    box-shadow: 0 0 6px rgba(102, 187, 106, 0.4);
 }
 
 button {
     width: 100%;
     padding: 14px;
-    background-color: #8e24aa;
+    background-color: #388e3c;
     color: white;
-    border: none;
     font-size: 16px;
+    border: none;
     border-radius: 10px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: background-color 0.3s ease;
     margin-top: 10px;
 }
 
 button:hover {
-    background-color: #6a1b9a;
+    background-color: #2e7d32;
 }
 
 .result {
