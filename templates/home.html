@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Agri Forecast Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Poppins', sans-serif;
       background-color: #eafaf1;
     }
 
@@ -23,7 +26,7 @@
 
     .sidebar h2 {
       text-align: center;
-      font-size: 18px;
+      font-size: 20px;
       margin-bottom: 30px;
       color: #96f7b5;
     }
@@ -50,7 +53,7 @@
     }
 
     .logout a {
-      color: #ff7070;
+      color: #ffffff;
       text-decoration: none;
     }
 
@@ -63,7 +66,6 @@
     .carousel {
       width: 100%;
       overflow: hidden;
-      border-radius: 0;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
@@ -74,50 +76,48 @@
     }
 
     .slides img {
-  width: 100vw;
-  height: 350px;
-  object-fit: cover;         
-  object-position: center;   
-  flex-shrink: 0;
-}
-
-
-
-
-    
+      width: 100vw;
+      height: 350px;
+      object-fit: cover;
+      object-position: center;
+      flex-shrink: 0;
+    }
 
     @keyframes slide {
-      0%   { transform: translateX(0vw); }
-      20%  { transform: translateX(0vw); }
-
-      25%  { transform: translateX(-100vw); }
-      45%  { transform: translateX(-100vw); }
-
-      50%  { transform: translateX(-200vw); }
-      70%  { transform: translateX(-200vw); }
-
-      75%  { transform: translateX(-300vw); }
-      95%  { transform: translateX(-300vw); }
-
-      100% { transform: translateX(0vw); }
+      0%, 20%   { transform: translateX(0vw); }
+      25%, 45%  { transform: translateX(-100vw); }
+      50%, 70%  { transform: translateX(-200vw); }
+      75%, 95%  { transform: translateX(-300vw); }
+      100%      { transform: translateX(0vw); }
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
       padding: 30px;
     }
 
     .card {
-      background-color: white;
-      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
       padding: 20px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
     }
 
     .card h3 {
       margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .card p {
+      font-size: 14px;
     }
 
     .user-info {
@@ -130,26 +130,102 @@
       width: 50px;
       border-radius: 50%;
     }
+
+    .primary-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #00c853, #64dd17);
+      padding: 12px 24px;
+      color: white;
+      font-weight: bold;
+      border-radius: 12px;
+      text-decoration: none;
+      margin: 20px 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease;
+    }
+
+    .primary-button:hover {
+      transform: scale(1.05);
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      font-weight: bold;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      animation: fadeInUp 1s ease-in-out;
+    }
+
+    .stat-card h2 {
+      font-size: 36px;
+      margin-bottom: 8px;
+      color: #2e7d32;
+    }
+
+    .stat-card p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    #weather-card {
+      background: linear-gradient(135deg, #bbdefb, #e3f2fd);
+      color: #0d47a1;
+    }
+    #weather-card {
+  background: linear-gradient(135deg, #e0f7fa, #ffffff);
+  color: #004d40;
+}
+
+#weather-info p {
+  font-size: 16px;
+  margin: 6px 0;
+  font-weight: 500;
+}
+
+.weather-city {
+  font-size: 20px;
+  font-weight: bold;
+  color: #00796b;
+}
+.stat-card h2 {
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+
   </style>
 </head>
 <body>
 
   <div class="sidebar">
     <h2>🌿 Agri Forecast</h2>
-    <a href="#" class="nav-link active">🏠 Home</a>
+    <a href="/home" class="nav-link">🏠 Home</a>
     <a href="/analysis" class="nav-link">📈 Analysis</a>
     <a href="#" class="nav-link">📊 Sales Data</a>
     <a href="#" class="nav-link">👤 Profile</a>
     <a href="#" class="nav-link">⚙️ Settings</a>
 
     <div class="logout">
-      <a href="#">⏻ Log out</a>
+      <a href="/login" class="login-link">🟢 Login</a>  &nbsp;&nbsp;
+      <a href="/logout">🔴 Logout</a>
     </div>
+    
+    
   </div>
 
   <div class="content">
 
-    <!-- 🔁 Auto-Sliding Image Carousel -->
+    <!-- 🔁 Carousel -->
     <div class="carousel">
       <div class="slides">
         <img src="{{ url_for('static', filename='images/apple.png') }}" alt="Apple">
@@ -159,33 +235,100 @@
       </div>
     </div>
 
-    <!-- 🔲 Dashboard Grid -->
+    <!-- 🔘 Start Prediction Button -->
+    <a href="/analysis" class="primary-button">🔮 Start Prediction</a>
+
+    <!-- 📊 Dashboard Cards -->
     <div class="grid">
-      <div class="card">
-        <h3>Popular Commodities</h3>
-        <img src="{{ url_for('static', filename='images/popular_commodities.png') }}" alt="Commodity Chart" style="width: 100%;">
-      </div>
 
-      <div class="card">
-        <h3>Notifications</h3>
-        <p>Notice: New pricing guidelines have been issued.</p>
-      </div>
-
-      <div class="card">
-        <h3>Analysis</h3>
-        <p>Prediction of commodities based on AI model.</p>
-      </div>
-
-      <div class="card">
-        <h3>Sales Data</h3>
-        <div class="user-info">
-          <img src="https://www.w3schools.com/howto/img_avatar.png" alt="User Avatar">
-          <div><strong>Muneeb</strong></div>
+      <div class="card" id="weather-card">
+        <h3>🌦️ Current Weather</h3>
+        <div id="weather-info">
+          <p class="weather-city"></p>
+          <p class="weather-desc"></p>
+          <p class="weather-temp"></p>
+          <p class="weather-humidity"></p>
         </div>
       </div>
+      
+
+      <div class="card">
+        <h3>📈 Price Trends</h3>
+        <img src="{{ url_for('static', filename='images/popular_commodities.png') }}" alt="Trend Chart" style="width: 100%;">
+      </div>
+
+      <div class="card">
+        <h3>🔔 Notifications</h3>
+        <p>Notice: New pricing guidelines have been issued for Ganderbal Market.</p>
+      </div>
+
+      <div class="card">
+        <h3>🧠 AI Predictions</h3>
+        <p>Recent model accuracy: <strong>96.4%</strong>. Forecast suggests a rise in Apple prices.</p>
+      </div>
+
+      <div class="card">
+        <h3>📊 Sales Data</h3>
+        <div class="user-info">
+          <img src="https://www.w3schools.com/howto/img_avatar.png" alt="User Avatar">
+          <div>
+            <strong>Muneeb</strong><br>
+            Data Analyst
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+       <b><h3>🧺 Total Commodities</h3></b>
+        <h2>18</h2>
+        
+      </div>
+
+      <div class="stat-card">
+        <b><h3>🏬 Markets Analyzed</h3></b>
+        <h2>23</h2>
+        
+      </div>
+
+      <div class="stat-card">
+        <b><h3>🔮 Predictions Made</h3></b>
+        <h2>325</h2>
+       
+      </div>
+
     </div>
 
   </div>
+
+  <!-- 🔌 Weather API Script -->
+  <script>
+    const apiKey = "65a2b4e2a781eab6d8d2c63f22d5302a";
+    const city = "Srinagar";
+  
+    async function getWeather() {
+      try {
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`);
+        const data = await res.json();
+  
+        const cityName = data.name;
+        const description = data.weather[0].description;
+        const temp = data.main.temp;
+        const humidity = data.main.humidity;
+  
+        document.querySelector(".weather-city").innerText = `📍 ${cityName}`;
+        document.querySelector(".weather-desc").innerText = `☁️ ${description}`;
+        document.querySelector(".weather-temp").innerText = `🌡️ Temperature: ${temp}°C`;
+        document.querySelector(".weather-humidity").innerText = `💧 Humidity: ${humidity}%`;
+  
+      } catch (err) {
+        document.getElementById("weather-info").innerText = "⚠️ Failed to fetch weather.";
+      }
+    }
+  
+    getWeather();
+  </script>
+  
+  
 
 </body>
 </html>
