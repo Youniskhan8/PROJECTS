@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Commodity Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='analysis_style.css') }}">
+
+
+</head>
+
+<body>
+
+
+    <!-- <a href="/home" class="nav-btn">🏠 Back to Home</a>g -->
+    <div >
+        <h2>Commodity Price Prediction</h2>
+    </div>
+
+    <div class="container">
+        <div class="container_top">
+            <div><label for="commodity">Commodity:</label>
+                <select id="commodity">
+                    <option value="" disabled selected>Select a commodity</option>
+                    {% for item in dropdowns['commodities'] %}
+                    <option value="{{ item }}">{{ item }}</option>
+                    {% endfor %}
+                </select><br><br>
+            </div>
+
+            <div><label for="variety">Variety:</label>
+                <select id="variety">
+                    <option value="" disabled selected>select a variety</option>
+                    {% for item in dropdowns['varieties'] %}
+                    <option value="{{ item }}">{{ item }}</option>
+                    {% endfor %}
+                </select><br><br>
+            </div>
+
+            <div><label for="grade">Grade:</label>
+                <select id="grade">
+                    <option value="" disabled selected>select a grade</option>
+                    {% for item in dropdowns['grades'] %}
+                    <option value="{{ item }}">{{ item }}</option>
+                    {% endfor %}
+                </select><br><br>
+            </div>
+
+            <div> <label for="district_name">District Name:</label>
+                <select id="district">
+                    <option value="" disabled selected>select a district</option>
+                    {% for item in dropdowns['districts'] %}
+                    <option value="{{ item }}">{{ item }}</option>
+                    {% endfor %}
+                </select><br><br>
+            </div>
+
+            <div><label for="marketname">Market Name:</label>
+                <select id="market">
+                    <option value="" disabled selected>select a market</option>
+                    {% for item in dropdowns['markets'] %}
+                    <option value="{{ item }}">{{ item }}</option>
+                    {% endfor %}
+                </select><br><br>
+            </div>
+
+            <div><label for="pricedata">Price Date:</label>
+                <input type="date" id="priceDate"><br><br>
+            </div>
+
+            <div> <label for="temperature">Temperature:</label>
+                <input type="number" id="temperature" step="0.1"><br><br>
+            </div>
+        </div>
+        <div class="container_bottom">
+            <div> <button onclick="predictPrice()">Predict Price</button>
+            </div>
+            <div>
+                <h3 id="result"></h3>
+            </div>
+            
+        </div>
+
+    </div>
+
+
+
+    <script>
+        async function predictPrice() {
+            const data = {
+                "Commodity": document.getElementById("commodity").value,
+                "Variety": document.getElementById("variety").value,
+                "Grade": document.getElementById("grade").value,
+                "District Name": document.getElementById("district").value,
+                "Market Name": document.getElementById("market").value,
+                "Price Date": document.getElementById("priceDate").value,
+                "Temperature": parseFloat(document.getElementById("temperature").value)
+            };
+
+            const response = await fetch("http://127.0.0.1:5001/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            document.getElementById("result").innerText =
+                result["Predicted Modal Price"]
+                    ? "Predicted Price: ₹" + result["Predicted Modal Price"]
+                    : "Error: " + result["error"];
+        }
+    </script>
+
+
+</body>
+
+</html>

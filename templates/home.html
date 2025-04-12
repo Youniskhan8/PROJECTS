@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agri Forecast Dashboard</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <!-- Hamburger for Sidebar -->
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+    <!-- Logo and Title -->
+    <h1>
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> Agri Forecast
+    </h1>
+
+    <!-- Right Section: Dark Mode & Login -->
+    <div class="dark-mode-toggle">
+      🌞
+      <label class="switch">
+        <input type="checkbox" id="darkToggle">
+        <span class="slider round"></span>
+      </label>
+      🌜
+    <!-- Login Button -->
+    <form action="{{ url_for('logout') }}" method="GET" style="text-align: right; margin: 10px;">
+      <button type="submit" class="logout-btn">Logout</button>
+    </form>
+    
+    </div>
+  </div>
+
+  <!-- Sidebar Navigation -->
+  <div class="sidebar" id="sidebar">
+    <a href="/home" class="nav-link">🏠 Home</a>
+    <a href="/analysis" class="nav-link">📈 Analysis</a>
+    <a href="#" class="nav-link">📊 Sales Data</a>
+    <a href="#" class="nav-link">👤 Profile</a>
+    <a href="#" class="nav-link">⚙️ Settings</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content" id="main-content">
+
+    <!-- Carousel -->
+    <div class="carousel">
+      <div class="slides">
+        <img src="{{ url_for('static', filename='images/apple.png') }}" alt="Apple">
+        <img src="{{ url_for('static', filename='images/onions.png') }}" alt="Onions">
+        <img src="{{ url_for('static', filename='images/potato.png') }}" alt="Potato">
+        <img src="{{ url_for('static', filename='images/spinach.png') }}" alt="Spinach">
+      </div>
+    </div>
+
+    <!-- Prediction Button -->
+    <a href="/analysis" class="primary-button">🔮 Start Prediction</a>
+
+    <!-- Dashboard Cards Grid -->
+    <div class="grid">
+
+      <!-- Weather Info Card -->
+      <div class="card" id="weather-card">
+        <h3>🌦️ Current Weather</h3>
+        <div id="weather-info">
+          <p class="weather-city">📍 Srinagar</p>
+          <p class="weather-desc"></p>
+          <p class="weather-temp"></p>
+          <p class="weather-humidity"></p>
+        </div>
+      </div>
+
+      <!-- Price Trends Chart -->
+      <div class="card">
+        <h3>📈 Price Trends</h3>
+        <img src="{{ url_for('static', filename='images/popular_commodities.png') }}" alt="Chart" style="width: 100%;">
+      </div>
+
+      <!-- Notifications Card -->
+      <div class="card">
+        <h3>🔔 Notifications</h3>
+        <p>New pricing guidelines issued for Ganderbal Market.</p>
+      </div>
+
+      <!-- AI Model Accuracy Card -->
+      <div class="card">
+        <h3>🧠 AI Predictions</h3>
+        <p>Model Accuracy: <strong>96.4%</strong>. Apple prices expected to rise.</p>
+      </div>
+
+      <!-- User Profile Card -->
+      <div class="card">
+        <h3>📊 Sales Data</h3>
+        <div class="user-info">
+          <img src="https://www.w3schools.com/howto/img_avatar.png" alt="User">
+          <div><strong>Muneeb</strong><br>Data Analyst</div>
+        </div>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="stat-card">
+        <h3>🧺 Total Commodities</h3>
+        <h2>18</h2>
+      </div>
+
+      <div class="stat-card">
+        <h3>🏬 Markets Analyzed</h3>
+        <h2>23</h2>
+      </div>
+
+      <div class="stat-card">
+        <h3>🔮 Predictions Made</h3>
+        <h2>325</h2>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- External JavaScript -->
+  <script src="{{ url_for('static', filename='home.js') }}"></script>
+</body>
+</html>
