@@ -21,15 +21,10 @@
 
   <!-- Topbar -->
   <div class="topbar">
-    <!-- Hamburger for Sidebar -->
     <button class="hamburger" onclick="toggleSidebar()">☰</button>
-
-    <!-- Logo and Title -->
     <h1>
       <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> Agri Forecast
     </h1>
-
-    <!-- Right Section: Dark Mode & Login -->
     <div class="dark-mode-toggle">
       🌞
       <label class="switch">
@@ -37,11 +32,9 @@
         <span class="slider round"></span>
       </label>
       🌜
-    <!-- Login Button -->
-    <form action="{{ url_for('logout') }}" method="GET" style="text-align: right; margin: 10px;">
-      <button type="submit" class="logout-btn">Logout</button>
-    </form>
-    
+      <form action="{{ url_for('logout') }}" method="GET" style="text-align: right; margin: 10px;">
+        <button type="submit" class="logout-btn">Logout</button>
+      </form>
     </div>
   </div>
 
@@ -70,65 +63,52 @@
     <!-- Prediction Button -->
     <a href="/analysis" class="primary-button">🔮 Start Prediction</a>
 
-    <!-- Dashboard Cards Grid -->
-    <div class="grid">
+   <!-- Dashboard Cards Grid -->
+<div class="grid">
 
-      <!-- Weather Info Card -->
-      <div class="card" id="weather-card">
-        <h3>🌦️ Current Weather</h3>
-        <div id="weather-info">
-          <p class="weather-city">📍 Srinagar</p>
-          <p class="weather-desc"></p>
-          <p class="weather-temp"></p>
-          <p class="weather-humidity"></p>
-        </div>
-      </div>
-
-      <!-- Price Trends Chart -->
-      <div class="card">
-        <h3>📈 Price Trends</h3>
-        <img src="{{ url_for('static', filename='images/popular_commodities.png') }}" alt="Chart" style="width: 100%;">
-      </div>
-
-      <!-- Notifications Card -->
-      <div class="card">
-        <h3>🔔 Notifications</h3>
-        <p>New pricing guidelines issued for Ganderbal Market.</p>
-      </div>
-
-      <!-- AI Model Accuracy Card -->
-      <div class="card">
-        <h3>🧠 AI Predictions</h3>
-        <p>Model Accuracy: <strong>96.4%</strong>. Apple prices expected to rise.</p>
-      </div>
-
-      <!-- User Profile Card -->
-      <div class="card">
-        <h3>📊 Sales Data</h3>
-        <div class="user-info">
-          <img src="https://www.w3schools.com/howto/img_avatar.png" alt="User">
-          <div><strong>Muneeb</strong><br>Data Analyst</div>
-        </div>
-      </div>
-
-      <!-- Stat Cards -->
-      <div class="stat-card">
-        <h3>🧺 Total Commodities</h3>
-        <h2>18</h2>
-      </div>
-
-      <div class="stat-card">
-        <h3>🏬 Markets Analyzed</h3>
-        <h2>23</h2>
-      </div>
-
-      <div class="stat-card">
-        <h3>🔮 Predictions Made</h3>
-        <h2>325</h2>
-      </div>
-
+  <!-- Row 1: Weather + Price Trends -->
+  <div class="card" id="weather-card">
+    <h3>🌦️ Current Weather</h3>
+    <div id="weather-info">
+      <p class="weather-city">📍 Srinagar</p>
+      <p class="weather-desc"></p>
+      <p class="weather-temp"></p>
+      <p class="weather-humidity"></p>
     </div>
   </div>
+
+  <div class="card">
+    <h3>📈 Price Trends</h3>
+    <img src="{{ url_for('static', filename='images/popular_commodities.png') }}" alt="Chart" style="width: 100%;">
+  </div>
+
+  <!-- Row 2: Sales Data -->
+  <div class="card">
+    <h3>📊 Sales Data</h3>
+    <div class="user-info">
+      <img src="https://www.w3schools.com/howto/img_avatar.png" alt="User">
+      <div><strong>Muneeb</strong><br>Data Analyst</div>
+    </div>
+  </div>
+
+  <!-- Row 3: Stat Cards -->
+  <div class="stat-card black-text">
+    <h3>🧺 Total Commodities</h3>
+    <h2>18</h2>
+  </div>
+
+  <div class="stat-card black-text">
+    <h3>🏬 Markets Analyzed</h3>
+    <h2>23</h2>
+  </div>
+
+  <div class="stat-card black-text">
+    <h3>🔮 Predictions Made</h3>
+    <h2>325</h2>
+  </div>
+
+</div>
+
 
   <!-- External JavaScript -->
   <script src="{{ url_for('static', filename='home.js') }}"></script>
