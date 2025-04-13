@@ -1,0 +1,64 @@
+this is for flask change
+from flask import Flask, render_template, request, redirect, url_for, session
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+
+# Set up the database
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SECRET_KEY'] = 'your-secret-key'
+db = SQLAlchemy(app)
+
+# Define the User model
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    location = db.Column(db.String(100), nullable=True)
+    phone = db.Column(db.String(15), nullable=True)
+    email = db.Column(db.String(100), nullable=False)
+    occupation = db.Column(db.String(100), nullable=True)
+
+# Route for the profile page
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    # Check if the user is logged in
+    if 'user_id' not in session:
+        return redirect(url_for('login'))  # Redirect to login if not logged in
+
+    user = User.query.get(session['user_id'])  # Get the logged-in user from the database
+    
+    # If it's a POST request, update the user's profile data
+    if request.method == 'POST':
+        user.name = request.form['name']
+        user.location = request.form['location']
+        user.phone = request.form['phone']
+        user.email = request.form['email']
+        user.occupation = request.form['occupation']
+        
+        # Save the updated user data
+        db.session.commit()
+        return redirect(url_for('profile'))  # Redirect back to the profile page after saving
+    
+    # Render the profile page and pass user data to the template
+    return render_template('profile.html', user=user)
+
+# Example login route (you will have your own logic here)
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # Authenticate the user (simplified)
+        user = User.query.filter_by(email=request.form['email']).first()
+        if user:
+            session['user_id'] = user.id  # Store user ID in session
+            return redirect(url_for('profile'))  # Redirect to the profile page
+    return render_template('login.html')  # Render login page
+
+# Logout route
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)  # Remove user ID from session
+    return redirect(url_for('login'))  # Redirect to login page
+
+if __name__ == '__main__':
+    db.create_all()  # Create tables if they don't exist
+    app.run(debug=True)
