@@ -43,17 +43,3 @@ toggle.addEventListener("change", () => {
   }
 });
 
-function login() {
-    isLoggedIn = true;
-    document.getElementById('loginBtn').style.display = 'none';
-    document.getElementById('logoutBtn').style.display = 'inline-block';
-    alert("Login successful!");
-  }
-  
-  function logout() {
-    isLoggedIn = false;
-    document.getElementById('logoutBtn').style.display = 'none';
-    document.getElementById('loginBtn').style.display = 'inline-block';
-    alert("Logged out!");
-  }
-  
