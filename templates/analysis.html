@@ -11,15 +11,26 @@
 
 <body>
 
+    <div class="sidebar">
+        <h2>🌿 Agri Forecast</h2>
+        <a href="#" class="nav-link ">🏠 Home</a>
+        <a href="/analysis" class="nav-link">📈 Analysis</a>
+        <a href="#" class="nav-link">📊 Sales Data</a>
+        <a href="#" class="nav-link">👤 Profile</a>
+        <a href="#" class="nav-link">⚙️ Settings</a>
 
+        <div class="logout">
+            <a href="#">⏻ Log out</a>
+        </div>
+    </div>
     <!-- <a href="/home" class="nav-btn">🏠 Back to Home</a>g -->
-    <div >
+    <div class="title">
         <h2>Commodity Price Prediction</h2>
     </div>
 
     <div class="container">
         <div class="container_top">
-            <div><label for="commodity">Commodity:</label>
+            <!-- <div><label for="commodity">Commodity:</label>
                 <select id="commodity">
                     <option value="" disabled selected>Select a commodity</option>
                     {% for item in dropdowns['commodities'] %}
@@ -62,7 +73,43 @@
                     <option value="{{ item }}">{{ item }}</option>
                     {% endfor %}
                 </select><br><br>
+            </div> -->
+            <div><label for="commodity">Commodity:</label>
+                <select id="commodity" onchange="updateVarieties()">
+                    <option value="" disabled selected>Select a commodity</option>
+                    {% for item in dropdowns['commodities'] %}
+                    <option value="{{ item }}">{{ item }}</option>
+                    {% endfor %}
+                </select><br><br>
             </div>
+
+            <div><label for="variety">Variety:</label>
+                <select id="variety" onchange="updateGrades()">
+                    <option value="" disabled selected>Select a variety</option>
+                </select><br><br>
+            </div>
+
+            <div><label for="grade">Grade:</label>
+                <select id="grade">
+                    <option value="" disabled selected>Select a grade</option>
+                </select><br><br>
+            </div>
+
+            <div><label for="district_name">District Name:</label>
+                <select id="district" onchange="updateMarkets()">
+                    <option value="" disabled selected>Select a district</option>
+                    {% for item in dropdowns['districts'] %}
+                    <option value="{{ item }}">{{ item }}</option>
+                    {% endfor %}
+                </select><br><br>
+            </div>
+
+            <div><label for="marketname">Market Name:</label>
+                <select id="market">
+                    <option value="" disabled selected>Select a market</option>
+                </select><br><br>
+            </div>
+
 
             <div><label for="pricedata">Price Date:</label>
                 <input type="date" id="priceDate"><br><br>
@@ -78,7 +125,7 @@
             <div>
                 <h3 id="result"></h3>
             </div>
-            
+
         </div>
 
     </div>
@@ -86,6 +133,66 @@
 
 
     <script>
+        async function updateVarieties() {
+            const commodity = document.getElementById("commodity").value;
+            if (commodity) {
+                const response = await fetch("/get_options", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ type: "commodity", value: commodity })
+                });
+                const data = await response.json();
+                const varietySelect = document.getElementById("variety");
+                varietySelect.innerHTML = "<option value='' disabled selected>Select a variety</option>";
+                data.options.forEach(option => {
+                    const optionElement = document.createElement("option");
+                    optionElement.value = option;
+                    optionElement.innerText = option;
+                    varietySelect.appendChild(optionElement);
+                });
+            }
+        }
+
+        async function updateGrades() {
+            const variety = document.getElementById("variety").value;
+            if (variety) {
+                const response = await fetch("/get_options", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ type: "variety", value: variety })
+                });
+                const data = await response.json();
+                const gradeSelect = document.getElementById("grade");
+                gradeSelect.innerHTML = "<option value='' disabled selected>Select a grade</option>";
+                data.options.forEach(option => {
+                    const optionElement = document.createElement("option");
+                    optionElement.value = option;
+                    optionElement.innerText = option;
+                    gradeSelect.appendChild(optionElement);
+                });
+            }
+        }
+
+        async function updateMarkets() {
+            const district = document.getElementById("district").value;
+            if (district) {
+                const response = await fetch("/get_options", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ type: "district", value: district })
+                });
+                const data = await response.json();
+                const marketSelect = document.getElementById("market");
+                marketSelect.innerHTML = "<option value='' disabled selected>Select a market</option>";
+                data.options.forEach(option => {
+                    const optionElement = document.createElement("option");
+                    optionElement.value = option;
+                    optionElement.innerText = option;
+                    marketSelect.appendChild(optionElement);
+                });
+            }
+        }
+
         async function predictPrice() {
             const data = {
                 "Commodity": document.getElementById("commodity").value,
@@ -109,6 +216,7 @@
                     ? "Predicted Price: ₹" + result["Predicted Modal Price"]
                     : "Error: " + result["error"];
         }
+
     </script>
 
 

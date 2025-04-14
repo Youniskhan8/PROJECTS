@@ -44,6 +44,52 @@ def home():
 @app.route("/analysis")
 def analysis():
     return render_template("analysis.html", dropdowns=dropdown_values)
+# i added it for cascading dropdowns
+# @app.route("/get_options", methods=["POST"])
+# def get_options():
+#     data = request.get_json()
+#     option_type = data.get("type")
+#     value = data.get("value")
+
+#     if option_type == "commodity":
+#         filtered_df = df[df["Commodity"] == value]
+#         varieties = sorted(filtered_df["Variety"].dropna().unique().tolist())
+#         return jsonify({"options": varieties})
+
+#     elif option_type == "variety":
+#         filtered_df = df[df["Variety"] == value]
+#         grades = sorted(filtered_df["Grade"].dropna().unique().tolist())
+#         return jsonify({"options": grades})
+
+#     elif option_type == "district":
+#         filtered_df = df[df["District Name"] == value]
+#         markets = sorted(filtered_df["Market Name"].dropna().unique().tolist())
+#         return jsonify({"options": markets})
+
+#     return jsonify({"options": []})
+@app.route("/get_options", methods=["POST"])
+def get_options():
+    data = request.get_json()
+    option_type = data.get("type")
+    value = data.get("value")
+
+    # Handle cascading dropdown logic
+    if option_type == "commodity":
+        filtered_df = df[df["Commodity"] == value]
+        varieties = sorted(filtered_df["Variety"].dropna().unique().tolist())
+        return jsonify({"options": varieties})
+
+    elif option_type == "variety":
+        filtered_df = df[df["Variety"] == value]
+        grades = sorted(filtered_df["Grade"].dropna().unique().tolist())
+        return jsonify({"options": grades})
+
+    elif option_type == "district":
+        filtered_df = df[df["District Name"] == value]
+        markets = sorted(filtered_df["Market Name"].dropna().unique().tolist())
+        return jsonify({"options": markets})
+
+    return jsonify({"options": []})
 
 
 @app.route("/predict", methods=["POST"])
@@ -67,7 +113,6 @@ def predict():
 
         model_input = np.array([[data_encoded[col] for col in [
             "District Name", "Market Name", "Commodity", "Variety", "Grade", "year", "month", "Temperature"]]])
-
         prediction = model.predict(model_input)[0]
         return jsonify({"Predicted Modal Price": prediction})
 
