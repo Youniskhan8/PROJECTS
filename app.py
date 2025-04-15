@@ -1,15 +1,51 @@
 import os
 import pickle
+import sqlite3
 import pandas as pd
 import numpy as np
-from flask import Flask, request, jsonify, render_template
+from datetime import timedelta
+from flask import Flask, request, jsonify, render_template, redirect, url_for, flash, session
 from flask_cors import CORS
+from flask_login import LoginManager, login_user, login_required, logout_user, UserMixin, current_user
 
 # Initialize Flask app
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'
+app.permanent_session_lifetime = timedelta(minutes=30)  # Optional: Session expires after 30 mins
 CORS(app)
 
-# Load trained model
+# === LOGIN SETUP ===
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+class User(UserMixin):
+    def __init__(self, id_, username):
+        self.id = id_
+        self.username = username
+
+@login_manager.user_loader
+def load_user(user_id):
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE id=?", (user_id,))
+    user = cursor.fetchone()
+    conn.close()
+    if user:
+        return User(id_=user[0], username=user[1])
+    return None
+
+def init_user_db():
+    with sqlite3.connect('users.db') as conn:
+        conn.execute('''CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        )''')
+
+init_user_db()
+
+# === MODEL SETUP ===
 if os.path.exists("model.pkl"):
     with open("model.pkl", "rb") as model_file:
         model = pickle.load(model_file)
@@ -17,13 +53,10 @@ if os.path.exists("model.pkl"):
 else:
     print("❌ model.pkl not found!")
 
-# Load Label Encoders
 with open("label_encoders.pkl", "rb") as le_file:
     le_dict = pickle.load(le_file)
 
-# Load dataset for dropdowns
 df = pd.read_csv("final_merged_dataset (1).csv")
-
 dropdown_values = {
     "commodities": sorted(df["Commodity"].dropna().unique()),
     "varieties": sorted(df["Variety"].dropna().unique()),
@@ -32,6 +65,7 @@ dropdown_values = {
     "markets": sorted(df["Market Name"].dropna().unique())
 }
 
+# === ROUTES ===
 @app.route("/")
 def status():
     return "Commodity Price Prediction API is running!"
@@ -40,10 +74,59 @@ def status():
 def home():
     return render_template("home.html")
 
-
 @app.route("/analysis")
 def analysis():
     return render_template("analysis.html", dropdowns=dropdown_values)
+
+@app.route("/profile")
+@login_required
+def profile():
+    return render_template("profile.html")
+
+@app.route("/sales")
+@login_required
+def sales():
+    return render_template("sales.html")
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        with sqlite3.connect('users.db') as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
+            user = cursor.fetchone()
+            if user:
+                user_obj = User(id_=user[0], username=user[1])
+                login_user(user_obj, remember=False)
+                session.permanent = False  # Ensure session does not persist after browser closes
+                return redirect(url_for('home_page'))
+            else:
+                flash("Invalid username or password.")
+    return render_template("login.html")
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        try:
+            with sqlite3.connect('users.db') as conn:
+                conn.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
+            flash("Registration successful. Please log in.")
+            return redirect(url_for('login'))
+        except sqlite3.IntegrityError:
+            flash("Username already exists.")
+    return render_template("register.html")
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    session.clear()  # Clear session data
+    flash("You have been logged out.")
+    return redirect(url_for('home_page'))
 
 @app.route("/get_options", methods=["POST"])
 def get_options():
@@ -51,7 +134,6 @@ def get_options():
     option_type = data.get("type")
     value = data.get("value")
 
-    # Handle cascading dropdown logic
     if option_type == "commodity":
         filtered_df = df[df["Commodity"] == value]
         varieties = sorted(filtered_df["Variety"].dropna().unique().tolist())
@@ -69,12 +151,10 @@ def get_options():
 
     return jsonify({"options": []})
 
-
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
 
-    # Required fields
     required_fields = ["Commodity", "Variety", "Grade", "District Name", "Market Name", "Price Date", "Temperature"]
     for field in required_fields:
         if field not in data:

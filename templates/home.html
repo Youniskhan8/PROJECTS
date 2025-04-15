@@ -25,17 +25,36 @@
     <h1>
       <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> Agri Forecast
     </h1>
-    
   </div>
 
   <!-- Sidebar Navigation -->
-  <div class="sidebar" id="sidebar">
-    <a href="/home" class="nav-link">🏠 Home</a>
-    <a href="/analysis" class="nav-link">📈 Analysis</a>
-    <a href="#" class="nav-link">📊 Sales Data</a>
-    <a href="#" class="nav-link">👤 Profile</a>
-    <a href="#" class="nav-link">⚙️ Settings</a>
-  </div>
+  
+<!-- Sidebar Navigation -->
+<div class="sidebar" id="sidebar">
+  <a href="{{ url_for('home_page') }}" class="nav-link">
+    🏠 Home
+  </a>
+  <a href="{{ url_for('analysis') }}" class="nav-link">
+    📈 Analysis
+  </a>
+  {% if current_user.is_authenticated %}
+    <a href="{{ url_for('profile') }}" class="nav-link">
+      👤 Profile
+    </a>
+    <a href="{{ url_for('sales') }}" class="nav-link">
+      📊 Sales Data
+    </a>
+    <a href="{{ url_for('logout') }}" class="nav-link">
+      🔓 Logout
+    </a>
+  {% else %}
+    <a href="{{ url_for('login') }}" class="nav-link">
+      🔐 Login
+    </a>
+  {% endif %}
+</div>
+
+
 
   <!-- Main Content -->
   <div class="content" id="main-content">
@@ -53,52 +72,52 @@
     <!-- Prediction Button -->
     <a href="/analysis" class="primary-button">🔮 Start Prediction</a>
 
-   <!-- Dashboard Cards Grid -->
-<div class="grid">
+    <!-- Dashboard Cards Grid -->
+    <div class="grid">
 
-  <!-- Row 1: Weather + Price Trends -->
-  <div class="card" id="weather-card">
-    <h3>🌦️ Current Weather</h3>
-    <div id="weather-info">
-      <p class="weather-city">📍 Srinagar</p>
-      <p class="weather-desc"></p>
-      <p class="weather-temp"></p>
-      <p class="weather-humidity"></p>
+      <!-- Row 1: Weather + Price Trends -->
+      <div class="card" id="weather-card">
+        <h3>🌦️ Current Weather</h3>
+        <div id="weather-info">
+          <p class="weather-city">📍 Srinagar</p>
+          <p class="weather-desc"></p>
+          <p class="weather-temp"></p>
+          <p class="weather-humidity"></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>📈 Price Trends</h3>
+        <img src="{{ url_for('static', filename='images/popular_commodities.png') }}" alt="Chart" style="width: 100%;">
+      </div>
+
+      <!-- Row 2: Sales Data -->
+      <div class="card">
+        <h3>📊 Sales Data</h3>
+        <div class="user-info">
+          <img src="https://www.w3schools.com/howto/img_avatar.png" alt="User">
+          <div><strong>Muneeb</strong><br>Data Analyst</div>
+        </div>
+      </div>
+
+      <!-- Row 3: Stat Cards -->
+      <div class="stat-card black-text">
+        <h3>🧺 Total Commodities</h3>
+        <h2>18</h2>
+      </div>
+
+      <div class="stat-card black-text">
+        <h3>🏬 Markets Analyzed</h3>
+        <h2>23</h2>
+      </div>
+
+      <div class="stat-card black-text">
+        <h3>🔮 Predictions Made</h3>
+        <h2>325</h2>
+      </div>
+
     </div>
   </div>
-
-  <div class="card">
-    <h3>📈 Price Trends</h3>
-    <img src="{{ url_for('static', filename='images/popular_commodities.png') }}" alt="Chart" style="width: 100%;">
-  </div>
-
-  <!-- Row 2: Sales Data -->
-  <div class="card">
-    <h3>📊 Sales Data</h3>
-    <div class="user-info">
-      <img src="https://www.w3schools.com/howto/img_avatar.png" alt="User">
-      <div><strong>Muneeb</strong><br>Data Analyst</div>
-    </div>
-  </div>
-
-  <!-- Row 3: Stat Cards -->
-  <div class="stat-card black-text">
-    <h3>🧺 Total Commodities</h3>
-    <h2>18</h2>
-  </div>
-
-  <div class="stat-card black-text">
-    <h3>🏬 Markets Analyzed</h3>
-    <h2>23</h2>
-  </div>
-
-  <div class="stat-card black-text">
-    <h3>🔮 Predictions Made</h3>
-    <h2>325</h2>
-  </div>
-
-</div>
-
 
   <!-- External JavaScript -->
   <script src="{{ url_for('static', filename='home.js') }}"></script>
