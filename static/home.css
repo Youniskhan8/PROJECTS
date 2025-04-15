@@ -291,57 +291,6 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(20px);
 }
-
-/* --- DARK MODE --- */
-body.dark {
-  background-color: #111;
-  color: #ddd;
-}
-
-body.dark .topbar {
-  background-color: #1a1a1a;
-  color: #00e676;
-}
-
-body.dark .sidebar {
-  background-color: #1a1a1a;
-}
-
-body.dark .nav-link {
-  color: #eee;
-}
-
-body.dark .nav-link:hover,
-body.dark .nav-link.active {
-  background-color: #004d40;
-}
-
-body.dark .primary-button {
-  background-color: #222;
-  color: #00e676;
-}
-
-body.dark .card,
-body.dark .stat-card {
-  background-color: #222;
-  color: #ddd;
-  box-shadow: 0 4px 15px rgba(0, 255, 128, 0.2);
-}
-
-body.dark #weather-card {
-  background: linear-gradient(135deg, #1e1e1e, #333);
-  color: #90ee90;
-}
-
-body.dark .auth-btn {
-  background-color: #444;
-  color: #fff;
-}
-
-body.dark .auth-btn:hover {
-  background-color: #666;
-}
-
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
   .content {

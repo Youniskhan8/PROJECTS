@@ -24,22 +24,5 @@ function toggleSidebar() {
   const isHidden = sidebar.classList.toggle('hidden');
   content.classList.toggle('full', isHidden);
 }
-// --- DARK MODE TOGGLE HANDLER ---
-const toggle = document.getElementById("darkToggle");
-const currentMode = localStorage.getItem("mode");
 
-if (currentMode === "dark") {
-  document.body.classList.add("dark");
-  toggle.checked = true;
-}
-
-toggle.addEventListener("change", () => {
-  if (toggle.checked) {
-    document.body.classList.add("dark");
-    localStorage.setItem("mode", "dark");
-  } else {
-    document.body.classList.remove("dark");
-    localStorage.setItem("mode", "light");
-  }
-});
 
