@@ -174,20 +174,7 @@ body {
   border-radius: 50%;
 }
 
-.stat-card {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  text-align: center;
-  font-weight: bold;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  color: black;
-}
 
-.stat-card h2 {
-  font-size: 32px;
-  color: black;
-}
 
 /* --- WEATHER CARD --- */
 #weather-card {
