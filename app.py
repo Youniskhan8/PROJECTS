@@ -14,15 +14,18 @@ app.secret_key = 'your_secret_key'
 app.permanent_session_lifetime = timedelta(minutes=30)  # Optional: Session expires after 30 mins
 CORS(app)
 
+
 # === LOGIN SETUP ===
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+
 class User(UserMixin):
     def __init__(self, id_, username):
         self.id = id_
         self.username = username
+        
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -65,6 +68,18 @@ dropdown_values = {
     "markets": sorted(df["Market Name"].dropna().unique())
 }
 
+def get_sales_data_for_user(username):
+    with sqlite3.connect('sales.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT product, quantity, price, date FROM sales WHERE username = ?", (username,))
+        rows = cursor.fetchall()
+        sales_data = [
+            {"product": row[0], "quantity": row[1], "price": row[2], "date": row[3]}
+            for row in rows
+        ]
+    return sales_data
+
+
 # === ROUTES ===
 @app.route("/")
 def status():
@@ -81,12 +96,17 @@ def analysis():
 @app.route("/profile")
 @login_required
 def profile():
-    return render_template("profile.html")
+    return render_template("profile.html", username=current_user.username)
+
 
 @app.route("/sales")
 @login_required
 def sales():
-    return render_template("sales.html")
+    # This is just an example if you had user-specific sales data
+    # You could use a database filter: WHERE user_id = current_user.id
+    sales_data = get_sales_data_for_user(current_user.username)
+    return render_template("sales.html", username=current_user.username, data=sales_data)
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

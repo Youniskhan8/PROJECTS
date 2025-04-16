@@ -6,10 +6,11 @@
     box-sizing:border-box;
 }
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    font-family: 'Poppins', sans-serif;
     /* background: linear-gradient(to right, #a8e063, #56ab2f); 🍃 Green Gradient */
     color: #333;
- 
+    background-color: #eafaf1;
     min-height: 100vh;
     /* display: flex;
     flex-direction: column; */
@@ -21,17 +22,60 @@ body {
     overflow-y: hidden;
     
 }
-
+/* --- TOPBAR --- */
+.topbar {
+     /* border:1px solid red; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background-color: #10271e;
+    color: white;
+    display: flex;  /*ensure vertical elements in center*/
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 16px;
+    z-index: 1002;
+  }
+  
+  .topbar h1 {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    margin: 0;
+  }
+  
+  .topbar img {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .hamburger {
+    font-size: 22px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-right: 16px;
+  }
+ /* sidebar*/
 .sidebar {
     width: 220px;
-    height: 100vh;
+    height:calc(100vh - 60px);
     background-color: #10271e;
     color: white;
     position: fixed;
-    top:0;
+    top:60px;
     left:0;
     padding-top: 20px;
-    z-index: 2;
+    z-index: 1001;
+    transition:transform .3s ease;
+  }
+  .sidebar.hidden {
+    transform: translateX(-220px);
   }
 
   .sidebar h2 {
@@ -46,10 +90,10 @@ body {
     display: block;
     color: white;
     text-decoration: none;
-    transition: 0.3s;
+    /* transition: 0.3s; */
   }
 
-  .nav-link:hover, .nav-link.active {
+  .nav-link:hover {
     background-color: #1fa566;
     color: white;
     border-radius: 5px;
@@ -66,14 +110,43 @@ body {
     color: #ff7070;
     text-decoration: none;
   }
+
+/*side content*/
+#main-content {
+  background-size: cover;           /* this makes it fill the container */
+  background-position: center;
+  background-repeat: no-repeat;
+  border:2px solid orange;
+  height:100vh;
+  /* border:1px solid red; */
+  margin-left:220px;
+  transition: margin-left 0.3s ease;
+}
+
+#main-content.full {
+  margin-left: 0; /* when sidebar is hidden */
+}
+
 .title{
     /* background-color: pink;  */
     width:80%;
-    padding-left:13rem;
+    /* padding-left:120px; */
+    /* position:fixed;
+    top:180px;
+    left:220px; */
+    padding: 0 1.5rem;
+    margin-top: 220px;
+  
+  
 }
 .container {
     max-width: 100%;
     height:25vh;
+    /* position:absolute;
+    top:70px;
+    left:240px; */
+      margin: 1rem 2rem 0 2rem;
+      margin-top: 70px;
     background: #ffffffee;
     padding: 6px 40px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -81,16 +154,18 @@ body {
     animation: fadeIn 0.6s ease-in-out 1s;
     display:flex;
     flex-direction: column;
-    align-items: end;
+    align-items: flex-start;
     /* margin-bottom: 4rem; */
     
 }
+
 .container_top{
     display:flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin-right:3px;
+     gap:.6rem; 
+    
 }
 .container_bottom{
     display:flex;
@@ -142,7 +217,7 @@ select:focus {
     box-shadow: 0 0 6px rgba(102, 187, 106, 0.4);
 }
 
-button {
+.result_button {
     width:150px;
     padding: 5px;
     background-color: #3e7b41;
@@ -155,7 +230,7 @@ button {
     margin-top: 6px;
 }
 
-button:hover {
+.button_button:hover {
     background-color: #2e7d32;
 }
 
@@ -165,4 +240,10 @@ button:hover {
     font-weight: bold;
     text-align: center;
     color: #1b5e20 ;
+}
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .content {
+      margin-left: 0;
+  }
 }
