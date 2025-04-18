@@ -1,6 +1,188 @@
-<h2>Sales Data for {{ username }}</h2>
-<ul>
-  {% for item in data %}
-    <li>{{ item }}</li>
-  {% endfor %}
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Sale</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='analysis_style.css') }}">
+</head>
+
+<body>
+    <div class="topbar">
+        <button class="hamburger" onclick="toggleSidebar()">☰</button>
+        <h1>
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> Agri Forecast
+        </h1>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <a href="/home" class="nav-link">🏠 Home</a>
+        <a href="/analysis" class="nav-link">📈 Analysis</a>
+        <a href="/sales" class="nav-link">📊 Sales Data</a>
+        <a href="/profile" class="nav-link">👤 Profile</a>
+        <a href="#" class="nav-link">⚙️ Settings</a>
+        <div class="logout"><a href="/logout">⏻ Log out</a></div>
+    </div>
+
+    <section id="main-content">
+        <div class="title">
+            <h2>Submit Your Sale</h2>
+        </div>
+
+        <div class="container">
+            <form method="POST" action="/submit_sale">
+                <div class="container_top">
+                    <div>
+                        <label for="commodity">Commodity:</label>
+                        <select id="commodity" name="commodity" onchange="updateVarieties()" required>
+                            <option value="" disabled selected>Select</option>
+                            {% for item in dropdowns['commodities'] %}
+                            <option value="{{ item }}">{{ item }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="variety">Variety:</label>
+                        <select id="variety" name="variety" onchange="updateGrades()" required>
+                            <option value="" disabled selected>Select</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="grade">Grade:</label>
+                        <select id="grade" name="grade" required>
+                            <option value="" disabled selected>Select</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="district">District:</label>
+                        <select id="district" name="district" onchange="updateMarkets()" required>
+                            <option value="" disabled selected>Select</option>
+                            {% for item in dropdowns['districts'] %}
+                            <option value="{{ item }}">{{ item }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="market">Market:</label>
+                        <select id="market" name="market" required>
+                            <option value="" disabled selected>Select</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="price">Price (₹):</label>
+                        <input type="number" name="price" id="price" step="0.01" required>
+                    </div>
+
+                    <div>
+                        <label for="date">Date of Sale:</label>
+                        <input type="date" name="price_date" id="date" max="" required>
+                    </div>
+                </div>
+
+                <div class="container_bottom">
+                    <button class="result_button" type="submit">Submit Sale</button>
+                </div>
+            </form>
+
+            <hr style="margin: 30px 0; border: 1px solid #ccc;">
+
+            <h3 style="margin-top: 30px;">Recent Sale Submissions</h3>
+            <table style="width: 100%; border-collapse: collapse; background: white;">
+                <thead>
+                    <tr>
+                        <th>District</th>
+                        <th>Market</th>
+                        <th>Commodity</th>
+                        <th>Modal Price (Rs./Quintal)</th>
+                        <th>Price Date</th>
+                        <th>Temperature</th>
+                        <th>User</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in recent_sales %}
+                        <tr>
+                            <td>{{ sale['District Name'] }}</td>
+                            <td>{{ sale['Market Name'] }}</td>
+                            <td>{{ sale['Commodity'] }}</td>
+                            <td>{{ sale['Modal Price (Rs./Quintal)'] }}</td>
+                            <td>{{ sale['Price Date'] }}</td>
+                            <td>{{ sale['Temperature'] or 'N/A' }}</td>
+                            <td>{{ sale['User'] or 'N/A' }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                
+            </table>
+        </div>
+    </section>
+
+    <script>
+        async function updateVarieties() {
+            const commodity = document.getElementById("commodity").value;
+            const res = await fetch("/get_options", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ type: "commodity", value: commodity })
+            });
+            const data = await res.json();
+            const varietySelect = document.getElementById("variety");
+            varietySelect.innerHTML = "<option value='' disabled selected>Select</option>";
+            data.options.forEach(option => {
+                varietySelect.innerHTML += `<option value="${option}">${option}</option>`;
+            });
+        }
+
+        async function updateGrades() {
+            const variety = document.getElementById("variety").value;
+            const res = await fetch("/get_options", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ type: "variety", value: variety })
+            });
+            const data = await res.json();
+            const gradeSelect = document.getElementById("grade");
+            gradeSelect.innerHTML = "<option value='' disabled selected>Select</option>";
+            data.options.forEach(option => {
+                gradeSelect.innerHTML += `<option value="${option}">${option}</option>`;
+            });
+        }
+
+        async function updateMarkets() {
+            const district = document.getElementById("district").value;
+            const res = await fetch("/get_options", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ type: "district", value: district })
+            });
+            const data = await res.json();
+            const marketSelect = document.getElementById("market");
+            marketSelect.innerHTML = "<option value='' disabled selected>Select</option>";
+            data.options.forEach(option => {
+                marketSelect.innerHTML += `<option value="${option}">${option}</option>`;
+            });
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('main-content');
+            const isHidden = sidebar.classList.toggle('hidden');
+            content.classList.toggle('full', isHidden);
+        }
+    </script>
+
+    <script>
+        // Set max date to today
+        document.addEventListener("DOMContentLoaded", () => {
+            const today = new Date().toISOString().split("T")[0];
+            document.getElementById("date").setAttribute("max", today);
+        });
+    </script>
+</body>
+
+</html>

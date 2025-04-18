@@ -105,7 +105,7 @@ def sales():
     # This is just an example if you had user-specific sales data
     # You could use a database filter: WHERE user_id = current_user.id
     sales_data = get_sales_data_for_user(current_user.username)
-    return render_template("sales.html", username=current_user.username, data=sales_data)
+    return render_template("sales.html", username=current_user.username, data=sales_data,dropdowns=dropdown_values)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -139,6 +139,24 @@ def register():
         except sqlite3.IntegrityError:
             flash("Username already exists.")
     return render_template("register.html")
+def insert_sale_to_db(entry):
+    conn = sqlite3.connect("sales.db")
+    c = conn.cursor()
+    c.execute('''INSERT INTO sales (
+        username, district, market, commodity, variety, grade, price, price_date
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)''', (
+        current_user.username,
+        entry["District Name"],
+        entry["Market Name"],
+        entry["Commodity"],
+        entry["Variety"],
+        entry["Grade"],
+        entry["Modal Price (Rs./Quintal)"],
+        entry["Price Date"]
+    ))
+    conn.commit()
+    conn.close()
+
 
 @app.route("/logout")
 @login_required
@@ -170,6 +188,91 @@ def get_options():
         return jsonify({"options": markets})
 
     return jsonify({"options": []})
+@app.route("/submit_sale", methods=["POST"])
+@login_required
+def submit_sale():
+    if request.method == "POST":
+        form_data = request.form
+
+        # Extract form data
+        price_date = pd.to_datetime(form_data["price_date"])
+        district_raw = form_data["district"]
+        market_raw = form_data["market"]
+        commodity_raw = form_data["commodity"]
+
+        # Lowercase for matching
+        district = district_raw.strip().lower()
+        market = market_raw.strip().lower()
+        commodity = commodity_raw.strip().lower()
+
+        # Read CSV
+        file_path = r"C:\Users\hp\Desktop\agriforecast\PROJECTS\update_csv\final_merged_dataset_updated.csv"
+        df = pd.read_csv(file_path)
+
+        # Clean columns and normalize for matching
+        df.columns = df.columns.str.strip()
+        df["District Name"] = df["District Name"].astype(str).str.strip().str.lower()
+        df["Market Name"] = df["Market Name"].astype(str).str.strip().str.lower()
+        df["Commodity"] = df["Commodity"].astype(str).str.strip().str.lower()
+        df["Price Date"] = pd.to_datetime(df["Price Date"], errors="coerce")
+
+        # Ensure Temperature and User columns exist
+        if "Temperature" not in df.columns:
+            df["Temperature"] = None
+        if "User" not in df.columns:
+            df["User"] = ""
+
+        # Try to get exact temperature match
+        temp_row = df[
+            (df["District Name"] == district) &
+            (df["Market Name"] == market) &
+            (df["Commodity"] == commodity) &
+            (df["Price Date"] == price_date)
+        ]
+
+        if not temp_row.empty and not pd.isna(temp_row.iloc[0]["Temperature"]):
+            temperature = temp_row.iloc[0]["Temperature"]
+        else:
+            # Fallback to last known temperature for same location + commodity
+            fallback_row = df[
+                (df["District Name"] == district) &
+                (df["Market Name"] == market) &
+                (df["Commodity"] == commodity) &
+                (df["Temperature"].notna())
+            ]
+            if not fallback_row.empty:
+                temperature = fallback_row.iloc[0]["Temperature"]
+            else:
+                temperature = ""
+
+        # Create new row (preserve original casing for display)
+        new_entry = {
+            "District Name": district_raw,
+            "Market Name": market_raw,
+            "Commodity": commodity_raw,
+            "Variety": form_data["variety"],
+            "Grade": form_data["grade"],
+            "Min Price (Rs./Quintal)": "",
+            "Max Price (Rs./Quintal)": "",
+            "Modal Price (Rs./Quintal)": form_data["price"],
+            "Price Date": price_date.strftime("%Y-%m-%d"),
+            "Temperature": temperature,
+            "User": current_user.username
+        }
+
+        # Append and save
+        df.loc[len(df)] = new_entry
+        df.to_csv(file_path, index=False)
+
+        flash("Sale data submitted successfully!", "success")
+        return redirect("/sales")
+
+
+
+
+
+
+
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -196,6 +299,8 @@ def predict():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+    
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
