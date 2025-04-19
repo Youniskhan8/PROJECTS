@@ -1,2 +1,118 @@
-<h2>Welcome, {{ username }}!</h2>
-<p>This is your personalized profile page.</p>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Profile - Agri Forecast</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='analysis_style.css') }}">
+    <style>
+        .profile-container {
+            padding: 2rem;
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-header h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-info div {
+            padding: 0.5rem;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .activity-section {
+            background-color: #f9f9f9;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .profile-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topbar">
+        <button class="hamburger" onclick="toggleSidebar()">☰</button>
+        <h1>
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> Agri Forecast
+        </h1>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a href="{{ url_for('home_page') }}" class="nav-link">🏠 Home</a>
+        <a href="{{ url_for('analysis') }}" class="nav-link">📈 Analysis</a>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('profile') }}" class="nav-link">👤 Profile</a>
+            <a href="{{ url_for('sales') }}" class="nav-link">📊 Sales Data</a>
+            <a href="{{ url_for('logout') }}" class="nav-link">🔓 Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}" class="nav-link">🔐 Login</a>
+        {% endif %}
+    </div>
+
+    <div class="profile-container" id="main-content">
+        <div class="profile-header">
+            <h2>Welcome, {{ username }}!</h2>
+            <p>This is your personalized profile page.</p>
+        </div>
+
+        <div class="profile-info">
+            <div>
+                <div class="section-title">Username:</div>
+                <div>{{ username }}</div>
+            </div>
+            <div>
+                <div class="section-title">Email:</div>
+                <div>{{ current_user.email }}</div>
+            </div>
+            <div>
+                <div class="section-title">Member Since:</div>
+                <div>{{ current_user.date_joined.strftime('%B %d, %Y') }}</div>
+            </div>
+            <div>
+                <div class="section-title">Last Login:</div>
+                <div>{{ current_user.last_login.strftime('%B %d, %Y %I:%M %p') }}</div>
+            </div>
+        </div>
+
+        <div class="activity-section">
+            <h3>📊 Recent Activity</h3>
+            <p>No recent activity. Start exploring the platform!</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('main-content');
+            const isHidden = sidebar.classList.toggle('hidden');
+            content.classList.toggle('full', isHidden);
+        }
+    </script>
+</body>
+</html>

@@ -13,20 +13,36 @@
     <div class="topbar">
         <button class="hamburger" onclick="toggleSidebar()">☰</button>
         <h1>
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> Agri Forecast
+          <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> Agri Forecast
         </h1>
-        
-    </div>
+      </div>
+    
+      <!-- Sidebar Navigation -->
+      
+    <!-- Sidebar Navigation -->
     <div class="sidebar" id="sidebar">
-        <a href="/home" class="nav-link ">🏠 Home</a>
-        <a href="/analysis" class="nav-link">📈 Analysis</a>
-        <a href="#" class="nav-link">📊 Sales Data</a>
-        <a href="#" class="nav-link">👤 Profile</a>
-        <a href="#" class="nav-link">⚙️ Settings</a>
-
-        <div class="logout">
-            <a href="#">⏻ Log out</a>
-        </div>
+      <a href="{{ url_for('home_page') }}" class="nav-link">
+        🏠 Home
+      </a>
+      <a href="{{ url_for('analysis') }}" class="nav-link">
+        📈 Analysis
+      </a>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('profile') }}" class="nav-link">
+          👤 Profile
+        </a>
+        <a href="{{ url_for('sales') }}" class="nav-link">
+          📊 Sales Data
+        </a>
+        <a href="{{ url_for('logout') }}" class="nav-link">
+          🔓 Logout
+        </a>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="nav-link">
+          🔐 Login
+        </a>
+      {% endif %}
+    </div>
     </div>
     <a href="/home" class="nav-btn">🏠 Back to Home</a>g
     <section id="main-content"  style="background-image: url('{{ url_for('static', filename='images/apple.png') }}'); ">

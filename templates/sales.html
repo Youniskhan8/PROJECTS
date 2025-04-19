@@ -11,19 +11,36 @@
     <div class="topbar">
         <button class="hamburger" onclick="toggleSidebar()">☰</button>
         <h1>
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> Agri Forecast
+          <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> Agri Forecast
         </h1>
-    </div>
-
+      </div>
+    
+      <!-- Sidebar Navigation -->
+      
+    <!-- Sidebar Navigation -->
     <div class="sidebar" id="sidebar">
-        <a href="/home" class="nav-link">🏠 Home</a>
-        <a href="/analysis" class="nav-link">📈 Analysis</a>
-        <a href="/sales" class="nav-link">📊 Sales Data</a>
-        <a href="/profile" class="nav-link">👤 Profile</a>
-        <a href="#" class="nav-link">⚙️ Settings</a>
-        <div class="logout"><a href="/logout">⏻ Log out</a></div>
+      <a href="{{ url_for('home_page') }}" class="nav-link">
+        🏠 Home
+      </a>
+      <a href="{{ url_for('analysis') }}" class="nav-link">
+        📈 Analysis
+      </a>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('profile') }}" class="nav-link">
+          👤 Profile
+        </a>
+        <a href="{{ url_for('sales') }}" class="nav-link">
+          📊 Sales Data
+        </a>
+        <a href="{{ url_for('logout') }}" class="nav-link">
+          🔓 Logout
+        </a>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="nav-link">
+          🔐 Login
+        </a>
+      {% endif %}
     </div>
-
     <section id="main-content">
         <div class="title">
             <h2>Submit Your Sale</h2>
@@ -89,38 +106,7 @@
                 </div>
             </form>
 
-            <hr style="margin: 30px 0; border: 1px solid #ccc;">
-
-            <h3 style="margin-top: 30px;">Recent Sale Submissions</h3>
-            <table style="width: 100%; border-collapse: collapse; background: white;">
-                <thead>
-                    <tr>
-                        <th>District</th>
-                        <th>Market</th>
-                        <th>Commodity</th>
-                        <th>Modal Price (Rs./Quintal)</th>
-                        <th>Price Date</th>
-                        <th>Temperature</th>
-                        <th>User</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for sale in recent_sales %}
-                        <tr>
-                            <td>{{ sale['District Name'] }}</td>
-                            <td>{{ sale['Market Name'] }}</td>
-                            <td>{{ sale['Commodity'] }}</td>
-                            <td>{{ sale['Modal Price (Rs./Quintal)'] }}</td>
-                            <td>{{ sale['Price Date'] }}</td>
-                            <td>{{ sale['Temperature'] or 'N/A' }}</td>
-                            <td>{{ sale['User'] or 'N/A' }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-                
-            </table>
-        </div>
-    </section>
+           
 
     <script>
         async function updateVarieties() {
